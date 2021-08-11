@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -3676,11 +3676,8 @@ auto CLuaBaseEntity::addSoulPlate(std::string const& name, uint16 mobFamily, uin
     if (auto* PChar = dynamic_cast<CCharEntity*>(m_PBaseEntity))
     {
         // Deduct Blank Plate
-        if (charutils::UpdateItem(PChar, PChar->equipLoc[SLOT_AMMO], PChar->equip[SLOT_AMMO], -1) == 0)
-        {
-            // Couldn't remove a blank plate
-            return std::nullopt;
-        }
+        battleutils::RemoveAmmo(PChar);
+        
         PChar->pushPacket(new CInventoryFinishPacket());
 
         // Used Soul Plate
@@ -6235,9 +6232,13 @@ bool CLuaBaseEntity::hasEminenceRecord(uint16 recordID)
 
 void CLuaBaseEntity::triggerRoeEvent(uint8 eventNum, sol::object const& reqTable)
 {
-    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
     RoeDatagramList roeEventData({});
     ROE_EVENT       eventID = static_cast<ROE_EVENT>(eventNum);
+
+    if (m_PBaseEntity->objtype != TYPE_PC)
+    {
+        return;
+    }
 
     if (reqTable.get_type() == sol::type::table)
     {
@@ -7135,10 +7136,9 @@ auto CLuaBaseEntity::addGuildPoints(uint8 guildID, uint8 slotID) -> std::tuple<u
     CGuild* PGuild = guildutils::GetGuild(guildID);
     auto*   PChar  = static_cast<CCharEntity*>(m_PBaseEntity);
 
-    int16 points = 0;
-    uint8 items  = PGuild->addGuildPoints(PChar, PChar->TradeContainer->getItem(slotID), points);
+    std::pair<uint8, uint16> gpResult  = PGuild->addGuildPoints(PChar, PChar->TradeContainer->getItem(slotID));
 
-    return { items, points };
+    return { gpResult.first, gpResult.second };
 }
 
 /************************************************************************

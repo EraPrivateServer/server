@@ -321,7 +321,7 @@ function getRoeRecords(triggers)
 
         [ 509] = { -- Obtain a Chocobo License
             trigger = triggers.questComplete,
-            reqs = { questComplete = {xi.quest.log_id.JEUNO, xi.quest.id.jeuno.CHOCOBO_S_WOUNDS} },
+            reqs = { questComplete = {xi.quest.log_id.JEUNO, xi.quest.id.jeuno.CHOCOBOS_WOUNDS} },
             flags = set{"retro"},
             reward = { sparks = 100, xp = 600 },
         },
@@ -1424,7 +1424,7 @@ function getRoeRecords(triggers)
 
         [1346] = { -- Bastok Rank 6-2
             trigger = triggers.missionComplete,
-            reqs = { missionComplete = {xi.mission.log_id.BASTOK, xi.mission.id.bastok.THE_PIRATE_S_COVE} },
+            reqs = { missionComplete = {xi.mission.log_id.BASTOK, xi.mission.id.bastok.THE_PIRATES_COVE} },
             flags = set{"retro"},
             reward = { item = { {4101,10} }, sparks = 300, xp = 500 },
         },
